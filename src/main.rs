@@ -18,10 +18,14 @@ use entities::Player;
 
 use input::player_controller;
 
+use renderer::Background;
+use renderer::Environment;
 use renderer::FpsCounter;
 use renderer::Renderer;
 
 struct GameState {
+    background: Background,
+    environment: Environment,
     fps_counter: FpsCounter,
     player: Player,
     font: Asset<Font>,
@@ -34,6 +38,8 @@ impl State for GameState {
         }));
 
         Ok(GameState {
+            background: Background::new(),
+            environment: Environment::new(),
             fps_counter: FpsCounter::new(),
             player: Player::new(),
             font: font,
@@ -48,6 +54,8 @@ impl State for GameState {
 
     fn draw(&mut self, window: &mut Window) -> Result<()> {
         window.clear(Color::BLACK)?;
+        self.background.render(window, &mut self.font)?;
+        self.environment.render(window, &mut self.font)?;
         self.fps_counter.render(window, &mut self.font)?;
         self.player.render(window, &mut self.font)?;
         Ok(())
